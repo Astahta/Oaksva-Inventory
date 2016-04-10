@@ -10,7 +10,13 @@ body {
     margin-top: 100px;
     background-color: #222;
 }
-
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 15px;
+}
 @media(min-width:768px) {
     body {
         margin-top: 50px;
@@ -225,3 +231,4 @@ ul.alert-dropdown {
 .panel-yellow > a:hover {
     color: #df8a13;
 }
+
