@@ -177,10 +177,12 @@
     <script src="js/jquery.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
+    <script src="datatables/jquery.dataTables.js"></script>
+    <script src="datatables/dataTables.bootstrap.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
         $(function() {
-            $("#purchase").dataTable();
+            $("#delivery").dataTable();
         });
     </script>
 </body>

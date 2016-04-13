@@ -49,7 +49,7 @@
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li>
+                    <li class="active">
                         <a href="adminDisplayInventory.php"><i class="fa fa-fw fa-dashboard"></i> Display Inventory</a>
                     </li>
                     
@@ -57,10 +57,10 @@
                         <a href="adminAddProduct.php"><i class="fa fa-fw fa-edit"></i> Add New Product</a>
                     </li>
                     
-                     <li class="active">
+                     <li>
                         <a href="adminDisplayEmployee.php"><i class="fa fa-fw fa-dashboard"></i> Display Employee</a>
                     </li>
-                   
+                     
                      <li>
                         <a href="adminAddEmployee.php"><i class="fa fa-fw fa-edit"></i> Add New Employee</a>
                     </li>
@@ -79,7 +79,7 @@
                 <br>
                 <div class="panel panel-yellow">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Display Employee</h3>
+                        <h3 class="panel-title">Display Inventory</h3>
                     </div>
                     <!-- Modal -->
                     <div class="modal fade" id="confirmation" role="dialog">
@@ -92,7 +92,7 @@
                                 <h4 class="modal-title">Konfirmasi Penghapusan</h4>
                             </div>
                             <div class="modal-body">
-                                <label>Anda yakin akan menghapus pegawai tersebut?</label>
+                                <label>Anda yakin akan menghapus produk tersebut?</label>
                             </div>
                             <div class="modal-footer">
                                 <button type="button"  data-dismiss="modal" class="btn btn-sm btn-warning">OK</button>
@@ -116,13 +116,13 @@
                             </div>
                             <div class="modal-body">
                                 <form role="form">
-                                    <label>Password</label>
-                                    <input type="password" class="form-control" placeholder="Enter new password">
                                     <label>Nama</label>
+                                    <input type="password" class="form-control" placeholder="Enter new password">
+                                    <label>Vendor</label>
                                     <input type="password" class="form-control" placeholder="Enter new name">
-                                    <label>Nomor Telpon</label>
+                                    <label>Stok</label>
                                     <input type="password" class="form-control" placeholder="Enter new number phone">
-                                    <label>Divisi</label>
+                                    <label>Harga</label>
                                     <input type="password" class="form-control" placeholder="Enter new division">
                                 </form>
                             </div>
@@ -134,42 +134,42 @@
                           
                         </div>
                     </div>
-
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-6">
-                                
-                                <form role="form">  
-                                <div class="table-responsive">                                 
-                                     <table id="employee" class="table table-bordered table-hover table-striped">
-									  <tr>
+
+                                <form role="form">                                   
+                                     <table id="inventory" class="table table-bordered table-hover table-striped">
+                                      <tr>
                                         <th>No</th>
-										<th>Email</th>
-										<th>Nama Pegawai</th>
-										<th>No. Telp Pegawai</th>
-										<th>Divisi</th>
+                                        <th>Id Inventory</th>
+                                        <th>Nama Produk</th>
+                                        <th>Vendor</th>
+                                        <th>Stok</th>
+                                        <th>Harga</th>
                                         <th>Hapus</th>
-                                        <th>Delete</th>
-									  </tr>
-									    <tbody>
+                                        <th>Edit</th>
+                                      </tr>
+                                      <tbody>
                                             <?php
  
                                             //Data mentah yang ditampilkan ke tabel    
                                                 $con = mysqli_connect("localhost","root","","oaksva");
                                                         
-                                                $sql = 'SELECT email, nama, no_telpon, divisi  FROM pegawai';
+                                                $sql = 'SELECT id_inventory, nama, vendor, stok, harga  FROM inventory';
                                                         $result = mysqli_query($con, $sql);
                                                         $no = 1;
                                                         while ($obj = $result->fetch_object()) {
-                                                        $email = $obj->email;
+                                                        $id = $obj->id_inventory;
                                                 ?>
  
                                                 <tr align='left'>
                                                     <td><?php echo  $no;?></td>
-                                                    <td><?php echo  $obj->email; ?></td>
+                                                    <td><?php echo  $obj->id_inventory; ?></td>
                                                     <td><?php echo  $obj->nama; ?></td>
-                                                    <td><?php echo  $obj->no_telpon; ?></td>
-                                                    <td><?php echo  $obj->divisi; ?></td>
+                                                    <td><?php echo  $obj->vendor; ?></td>
+                                                    <td><?php echo  $obj->stok; ?></td>
+                                                    <td><?php echo  $obj->harga; ?></td>
                                                     <td>
                                                         <buttontype="submit" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmation">Hapus</button>
                                                     </td>
@@ -182,11 +182,10 @@
                                                 }
                                             ?>
                                         </tbody>
-									</table> 
+                                    </table> 
                                     <br>
-                                </div>
+
                                 </form>
-                            
 
                             </div>
                            
@@ -209,15 +208,16 @@
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="datatables/jquery.dataTables.js"></script>
     <script src="datatables/dataTables.bootstrap.js"></script>
     <script src="js/bootstrap.min.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script type="text/javascript">
         $(function() {
-            $("#employee").dataTable();
+            $("#inventory").dataTable();
         });
     </script>
 
