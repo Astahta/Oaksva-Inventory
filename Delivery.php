@@ -30,7 +30,16 @@
 </head>
 
 <body>
-
+    <?php
+        if(isset($_GET['stat'])){
+            $stat = $_GET['stat'];
+            if($stat==1){
+                echo "<script type='text/javascript'>alert('Validate success');</script>";
+            }else if($stat == 0){
+                echo "<script type='text/javascript'>alert('Wrong Acount');</script>";
+            }
+        }
+    ?>
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -50,7 +59,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li>
-                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Inventory</a>
+                        <a href="inventory.php"><i class="fa fa-fw fa-dashboard"></i> Inventory</a>
                     </li>
                     <li>
                         <a href="Purchase.php"><i class="fa fa-fw fa-table"></i> Purchase</a>
@@ -81,24 +90,28 @@
                     <!-- Modal -->
                     <div class="modal fade" id="myModal" role="dialog">
                         <div class="modal-dialog">
-                        
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Delivery Form</h4>
-                            </div>
-                            <div class="modal-body">
-                                <label>email</label>
-                                <input class="form-control" placeholder="Enter your email">
-                                <br>
-                                <label>password</label>
-                                <input type="password" class="form-control" placeholder="Enter your password">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button"  data-dismiss="modal" class="btn btn-sm btn-warning">OK</button>
-                                <button type="button"  data-dismiss="modal" class="btn btn-sm btn-danger">Cancel</button>
-                            </div>
+                            <form action="validate.php"  method="post">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Delivery Form</h4>
+                                </div>
+                                <div class="modal-body">
+                                    
+                                        <label>email</label>
+                                        <input name="email" class="form-control" placeholder="Enter your email">
+                                        <br>
+                                        <label>password</label>
+                                        <input name="password" type="password" class="form-control" placeholder="Enter your password">
+                                        <input name="order-id" type="hidden" id="orderId" value="">
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" name="Post"  class="btn btn-sm btn-warning">OK</button>
+                                    <button type="button"  data-dismiss="modal" class="btn btn-sm btn-danger">Cancel</button>
+                                </div>
+                            </form>
                           </div>
                           
                         </div>
@@ -125,13 +138,8 @@
                                                         //Data mentah yang ditampilkan ke tabel    
                                                         $con = mysqli_connect("localhost","root","","oaksva");
                                                         
-                                                        $sql = 'SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp, pesanan.alamat_pemesan as alamat  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "undone"';
-                                                            //printf("Select returned %d rows.\n", mysqli_num_rows($result));
-
-                                                            /* free result set */
-                                                            //mysqli_free_result($result);
-                                                        //}
-                                                        //$sql = mysql_query('SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "undone"');
+                                                        $sql = 'SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp, pesanan.alamat_pemesan as alamat  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "undone" AND transaksi_pesanan.status_pengiriman = "undone"';
+                                                        
                                                         $result = mysqli_query($con, $sql);
                                                         $no = 1;
                                                         while ($obj = $result->fetch_object()) {
@@ -144,7 +152,7 @@
                                                         <td><?php echo  $obj->telp; ?></td>
                                                         <td><?php echo  $obj->alamat; ?></td>
                                                         <td>
-                                                            <buttontype="submit" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#myModal">Validate</button>
+                                                            <buttontype="submit" id="button" class="validate-delivery btn btn-sm btn-warning" data-id=<?php echo $id?> value=<?php echo $id?> data-toggle="modal" data-target="#myModal" onclick= "validate()">Validate</button>
                                                         </td>
                                                     </tr>
                                                     <?php
@@ -172,6 +180,16 @@
 
     </div>
     <!-- /#wrapper -->
+    <script>
+    var validate = function(){
+        $(document).on("click", ".validate-delivery", function () {
+        var OrderId = $(this).data('id');
+        $(".modal-body #orderId").val( OrderId );
+        });
+
+    };
+        
+    </script>
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>

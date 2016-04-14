@@ -49,10 +49,10 @@
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li>
+                    <li class="active">
                         <a href="inventory.php"><i class="fa fa-fw fa-dashboard"></i> Inventory</a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="purchase.php"><i class="fa fa-fw fa-table"></i> Purchase</a>
                     </li>
                     <li>
@@ -78,31 +78,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">Purchase</h3>
                     </div>
-                    <!-- Modal -->
-                    <div class="modal fade" id="myModal" role="dialog">
-                        <div class="modal-dialog">
-                        
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Validation Form</h4>
-                            </div>
-                            <div class="modal-body">
-                                <label>email</label>
-                                <input class="form-control" placeholder="Enter your email">
-                                <br>
-                                <label>password</label>
-                                <input type="password" class="form-control" placeholder="Enter your password">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button"  data-dismiss="modal" class="btn btn-sm btn-warning">OK</button>
-                                <button type="button"  data-dismiss="modal" class="btn btn-sm btn-danger">Cancel</button>
-                            </div>
-                          </div>
-                          
-                        </div>
-                    </div>
+                    
 
                     <div class="panel-body">
                         <div class="row">
@@ -110,13 +86,16 @@
 
                                         <h2>Bordered with Striped Rows</h2>
                                         <div class="table-responsive">
-                                            <table id="purchase" class="table table-bordered table-hover table-striped">
+                                            <table id="inventory" class="table table-bordered table-hover table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Name</th>
-                                                        <th>Phone</th>
-                                                        <th>Action</th>
+                                                        <th>Nama Pemesan</th>
+                                                        <th>Inventory</th>
+                                                        <th>Jumlah Barang</th>
+                                                        <th>Status Pembayaran</th>
+                                                        <th>Status Pengiriman</th>
+                                                        <th>Tanggal Pesan</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -125,26 +104,25 @@
                                                         //Data mentah yang ditampilkan ke tabel    
                                                         $con = mysqli_connect("localhost","root","","oaksva");
                                                         
-                                                        $sql = 'SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "undone"';
-                                                            //printf("Select returned %d rows.\n", mysqli_num_rows($result));
-
-                                                            /* free result set */
-                                                            //mysqli_free_result($result);
-                                                        //}
-                                                        //$sql = mysql_query('SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "undone"');
+                                                        $sql = 'SELECT p.nama_pemesan as nama, i.nama as namainventory, t.jumlah_pesan as jumlah, t.status_pembayaran as bayar, t.status_pengiriman as kirim, Date(p.tanggal_pesan) as tp  FROM pesanan p  NATURAL JOIN transaksi_pesanan t NATURAL JOIN Inventory i ORDER BY t.tanggal_bayar';
+                                                        
                                                         $result = mysqli_query($con, $sql);
                                                         $no = 1;
                                                         while ($obj = $result->fetch_object()) {
-                                                        $id = $obj->id;
+                                                        //$id = $obj->id;
                                                     ?>
  
                                                     <tr align='left'>
                                                         <td><?php echo  $no;?></td>
                                                         <td><?php echo  $obj->nama; ?></td>
-                                                        <td><?php echo  $obj->telp; ?></td>
-                                                        <td>
+                                                        <td><?php echo  $obj->namainventory; ?></td>
+                                                        <td><?php echo  $obj->jumlah; ?></td>
+                                                        <td><?php echo  $obj->bayar; ?></td>
+                                                        <td><?php echo  $obj->kirim; ?></td>
+                                                        <td><?php echo  $obj->tp; ?></td>
+                                                        <!--td>
                                                             <buttontype="submit" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#myModal">Validate</button>
-                                                        </td>
+                                                        </td-->
                                                     </tr>
                                                     <?php
                                                     $no++;
@@ -178,7 +156,7 @@
     <script src="datatables/dataTables.bootstrap.js"></script>
     <script type="text/javascript">
         $(function() {
-            $("#purchase").dataTable();
+            $("#inventory").dataTable();
         });
     </script>
 
