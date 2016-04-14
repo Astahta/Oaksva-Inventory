@@ -33,7 +33,7 @@
 
     <div id="wrapper">
 
-        <!-- Navigation -->
+         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -50,29 +50,21 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li>
-                        <a href="adminDisplayInventory.html"><i class="fa fa-fw fa-dashboard"></i> Display Inventory</a>
+                        <a href="adminDisplayInventory.php"><i class="fa fa-fw fa-dashboard"></i> Display Inventory</a>
                     </li>
+                    
                     <li>
-                        <a href="adminUpdateProduct.html"><i class="fa fa-fw fa-edit"></i> Update Product</a>
+                        <a href="adminAddProduct.php"><i class="fa fa-fw fa-edit"></i> Add New Product</a>
                     </li>
-                    <li>
-                        <a href="adminAddProduct.html"><i class="fa fa-fw fa-edit"></i> Add New Product</a>
-                    </li>
-                    <li>
-                        <a href="adminDeleteProduct.html"><i class="fa fa-fw fa-edit"></i> Delete Product</a>
-                    </li>
+                    
                      <li>
-                        <a href="adminDisplayEmployee.html"><i class="fa fa-fw fa-dashboard"></i> Display Employee</a>
+                        <a href="adminDisplayEmployee.php"><i class="fa fa-fw fa-dashboard"></i> Display Employee</a>
                     </li>
-                     <li>
-                        <a href="adminUpdateEmployee.html"><i class="fa fa-fw fa-edit"></i> Update Employee</a>
+                   
+                     <li class="active">
+                        <a href="adminAddEmployee.php"><i class="fa fa-fw fa-edit"></i> Add New Employee</a>
                     </li>
-                     <li  class="active">
-                        <a href="adminAddEmployee.html"><i class="fa fa-fw fa-edit"></i> Add New Employee</a>
-                    </li>
-                     <li>
-                        <a href="adminDeleteEmployee.html"><i class="fa fa-fw fa-edit"></i> Delete Employee</a>
-                    </li>
+                    
                     <li>
                         <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                     </li>
@@ -92,22 +84,63 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-6">
+                                <?php
+                                // define variables and set to empty values
+                                $Email_Employee = $Name_Employee = $Phone_Employee = $Division_Employee = $Password_Employee = "";
+                                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                                   $Name_Employee = test_input($_POST["Name_Employee"]);
+                                   $Phone_Employee = test_input($_POST["Phone_Employee"]);
+                                   $Division_Employee = test_input($_POST["Division_Employee"]);
+                                   $Email_Employee = test_input($_POST["Email_Employee"]);
+                                   $Password_Employee = test_input($_POST["Password_Employee"]);
+                                }
 
-                                <form role="form">                                   
+                                function test_input($data) {
+                                   $data = trim($data);
+                                   $data = stripslashes($data);
+                                   $data = htmlspecialchars($data);
+                                   return $data;
+                                }
+                              
+ 
+                                            //Data mentah yang ditampilkan ke tabel    
+                                                $con = mysqli_connect("localhost","root","","oaksva");
+                                                $stmt = $con->prepare("INSERT INTO pegawai (email, nama, no_telpon, divisi, password) VALUES (?, ?, ?, ?, ?)");
+                                                $stmt->bind_param("sssss", $email, $nama, $telpon, $divisi, $password);
+                                                $email = $Email_Employee;
+                                                $nama = $Name_Employee;
+                                                $telpon = $Phone_Employee;
+                                                $divisi = $Division_Employee;
+                                                $password = $Password_Employee;
+                                                $stmt->execute();
+                                                $stmt->close();
+                                                $con->close();
+                       
+                                                    
+                                ?>
+                                <form role="form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input class="form-control" placeholder="Enter Employee email" type="text" name="Email_Employee" id="Email_Employee">
+                                    </div>                                 
 								    <div class="form-group">
                                         <label>Employee Name</label>
-                                        <input class="form-control" placeholder="Enter Employee name">
+                                        <input class="form-control" placeholder="Enter Employee name" type="text" name="Name_Employee" id="Name_Employee">
                                     </div>
 
                                     <div class="form-group">
                                         <label>Phone Number</label>
-                                        <input class="form-control" placeholder="Enter Employee phone number">
+                                        <input class="form-control" placeholder="Enter Employee phone number" type="text" name="Phone_Employee" id="Phone_Employee">
                                     </div>
 
                                     <div class="form-group">
                                         <label>Division</label>
-                                        <input class="form-control" placeholder="Enter Employee Division">
+                                        <input class="form-control" placeholder="Enter Employee Division" type="text" name="Division_Employee" id="Division_Employee">
                                     </div>
+                                      <div class="form-group">
+                                        <label>Password</label>
+                                        <input class="form-control" placeholder="Enter Employee Password" type="password" name="Password_Employee" id="Password_Employee">
+                                    </div> 
 
 									<br>
                                     <button type="submit" class="btn btn-sm btn-warning">Submit</button>

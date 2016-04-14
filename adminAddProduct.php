@@ -33,7 +33,7 @@
 
     <div id="wrapper">
 
-        <!-- Navigation -->
+       <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -50,29 +50,21 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li>
-                        <a href="adminDisplayInventory.html"><i class="fa fa-fw fa-dashboard"></i> Display Inventory</a>
+                        <a href="adminDisplayInventory.php"><i class="fa fa-fw fa-dashboard"></i> Display Inventory</a>
                     </li>
-                    <li>
-                        <a href="adminUpdateProduct.html"><i class="fa fa-fw fa-edit"></i> Update Product</a>
-                    </li>
+                    
                     <li class="active">
-                        <a href="adminAddProduct.html"><i class="fa fa-fw fa-edit"></i> Add New Product</a>
+                        <a href="adminAddProduct.php"><i class="fa fa-fw fa-edit"></i> Add New Product</a>
                     </li>
-                    <li>
-                        <a href="adminDeleteProduct.html"><i class="fa fa-fw fa-edit"></i> Delete Product</a>
-                    </li>
+                    
                      <li>
-                        <a href="adminDisplayEmployee.html"><i class="fa fa-fw fa-dashboard"></i> Display Employee</a>
+                        <a href="adminDisplayEmployee.php"><i class="fa fa-fw fa-dashboard"></i> Display Employee</a>
                     </li>
+                   
                      <li>
-                        <a href="adminUpdateEmployee.html"><i class="fa fa-fw fa-edit"></i> Update Employee</a>
+                        <a href="adminAddEmployee.php"><i class="fa fa-fw fa-edit"></i> Add New Employee</a>
                     </li>
-                     <li>
-                        <a href="adminAddEmployee.html"><i class="fa fa-fw fa-edit"></i> Add New Employee</a>
-                    </li>
-                     <li>
-                        <a href="adminDeleteEmployee.html"><i class="fa fa-fw fa-edit"></i> Delete Employee</a>
-                    </li>
+                    
                     <li>
                         <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                     </li>
@@ -92,26 +84,57 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-6">
+                                <?php
+                                // define variables and set to empty values
+                                $Name_Product = $Name_Vendor = $Price = $Stock = "";
+                                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                                   $Name_Product = test_input($_POST["Name_Product"]);
+                                   $Name_Vendor = test_input($_POST["Name_Vendor"]);
+                                   $Stock = test_input($_POST["Stock"]);
+                                   $Price = test_input($_POST["Price"]);
+                                }
 
-                                <form role="form">                                   
+                                function test_input($data) {
+                                   $data = trim($data);
+                                   $data = stripslashes($data);
+                                   $data = htmlspecialchars($data);
+                                   return $data;
+                                }
+                              
+ 
+                                            //Data mentah yang ditampilkan ke tabel    
+                                                $con = mysqli_connect("localhost","root","","oaksva");
+                                                $stmt = $con->prepare("INSERT INTO inventory (nama, vendor, stok, harga) VALUES (?, ?, ?, ?)");
+                                                $stmt->bind_param("ssss", $NP, $NV, $ST, $PR);
+                                                $NP = $Name_Product;
+                                                $NV = $Name_Vendor;
+                                                $ST = $Stock;
+                                                $PR = $Price;
+                                                $stmt->execute();
+                                                $stmt->close();
+                                                $con->close();
+                       
+                                                    
+                                ?>
+                                <form role="form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">                                   
 								    <div class="form-group">
                                         <label>Product Name</label>
-                                        <input class="form-control" placeholder="Enter Product name">
+                                        <input class="form-control" placeholder="Enter Product name" type="text" name="Name_Product" id="Name_Product">
                                     </div>
 
                                     <div class="form-group">
                                         <label>Vendor</label>
-                                        <input class="form-control" placeholder="Enter Vendor name">
+                                        <input class="form-control" placeholder="Enter Vendor name" type="text" name="Name_Vendor" id="Name_Vendor">
                                     </div>
 
                                     <div class="form-group">
                                         <label>Stock</label>
-                                        <input class="form-control" placeholder="Enter Product Stock">
+                                        <input class="form-control" placeholder="Enter Product Stock" type="text" name="Stock" id="Stock">
                                     </div>
 
                                     <div class="form-group">
                                         <label>Price</label>
-                                        <input class="form-control" placeholder="Product Price : 100000">
+                                        <input class="form-control" placeholder="Product Price : 100000" type="text" name="Price" id="Price">
                                     </div>
 									<br>
                                     <button type="submit" class="btn btn-sm btn-warning">Submit</button>
