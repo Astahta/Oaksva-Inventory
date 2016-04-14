@@ -84,7 +84,7 @@
                     <!-- Modal -->
                     <div class="modal fade" id="confirmation" role="dialog">
                         <div class="modal-dialog">
-                        
+                        <form action="validateade.php"  method="post">
                             <!-- Modal content-->
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -93,21 +93,22 @@
                             </div>
                             <div class="modal-body">
                                 <label>Anda yakin akan menghapus pegawai tersebut?</label>
+                                <input name="order-id" type="hidden" id="orderId" value="">
                             </div>
                             <div class="modal-footer">
-                                <button type="button"  data-dismiss="modal" class="btn btn-sm btn-warning">OK</button>
+                                <button type="submit"  name="Post" class="btn btn-sm btn-warning">OK</button>
                                 <button type="button"  data-dismiss="modal" class="btn btn-sm btn-danger">Cancel</button>
                             </div>
                           </div>
-                          
+                          </form>
                         </div>
                     </div>
 
 
                     <!-- Modal -->
-                    <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal fade" id="updateemployee" role="dialog">
                         <div class="modal-dialog">
-                        
+                        <form action="validateaue.php" method="post">
                             <!-- Modal content-->
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -115,23 +116,23 @@
                                 <h4 class="modal-title">Formulir Perubahan</h4>
                             </div>
                             <div class="modal-body">
-                                <form role="form">
+                                
                                     <label>Password</label>
-                                    <input type="password" class="form-control" placeholder="Enter new password">
+                                    <input type="password" name="pass" class="form-control" placeholder="Enter new password" >
                                     <label>Nama</label>
-                                    <input type="password" class="form-control" placeholder="Enter new name">
+                                    <input type="text" name="name" class="form-control" placeholder="Enter new name" id="nameId" value="">
                                     <label>Nomor Telpon</label>
-                                    <input type="password" class="form-control" placeholder="Enter new number phone">
+                                    <input type="text" name="phone" class="form-control" placeholder="Enter new number phone" id="telpId" value="">
                                     <label>Divisi</label>
-                                    <input type="password" class="form-control" placeholder="Enter new division">
-                                </form>
+                                    <input type="text" name="division" class="form-control" placeholder="Enter new division" id="divisiId" value="">
+                                    <input name="emailid" type="hidden" id="emailId" value="">
                             </div>
                             <div class="modal-footer">
-                                <button type="button"  data-dismiss="modal" class="btn btn-sm btn-warning">OK</button>
+                                <button type="submit"  name="Post" class="btn btn-sm btn-warning">OK</button>
                                 <button type="button"  data-dismiss="modal" class="btn btn-sm btn-danger">Cancel</button>
                             </div>
                           </div>
-                          
+                          </form>
                         </div>
                     </div>
 
@@ -162,6 +163,9 @@
                                                         $no = 1;
                                                         while ($obj = $result->fetch_object()) {
                                                         $email = $obj->email;
+                                                        $nama = $obj->nama;
+                                                        $telpon = $obj->no_telpon;
+                                                        $divisi = $obj->divisi;
                                                 ?>
  
                                                 <tr align='left'>
@@ -171,10 +175,14 @@
                                                     <td><?php echo  $obj->no_telpon; ?></td>
                                                     <td><?php echo  $obj->divisi; ?></td>
                                                     <td>
-                                                        <buttontype="submit" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmation">Hapus</button>
+                                                        <buttontype="submit" class="delete-employee btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmation" data-id=<?php echo $email?> value=<?php echo $email?> onclick= "validate()">Hapus</button>
                                                     </td>
                                                     <td>    
-                                                        <buttontype="submit" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#myModal">Ubah</button>
+                                                        <buttontype="submit" class="update-employee btn btn-sm btn-warning" data-toggle="modal" data-target="#updateemployee" data-id=<?php echo $no?> value=<?php echo $email?> onclick= "validateupdate()">Ubah</button>
+                                                        <input name="nama-id" type="hidden" id="<?php echo $no?>" value="<?php echo $nama?>">
+                                                        <input name="telp-id" type="hidden" id="<?php echo $no?>" value="<?php echo $telpon?>">
+                                                        <input name="divisi-id" type="hidden" id="<?php echo $no?>" value="<?php echo $divisi?>">
+                                                        <input name="email-id" type="hidden" id="<?php echo $no?>" value="<?php echo $email?>">
                                                     </td>
                                                 </tr>
                                             <?php
@@ -206,7 +214,30 @@
 
     </div>
     <!-- /#wrapper -->
+     <script>
+    var validate = function(){
+        $(document).on("click", ".delete-employee", function () {
+        var OrderId = $(this).data('id');
+        $(".modal-body #orderId").val( OrderId );
+        });
+    };
 
+    var validateupdate = function(){
+        $(document).on("click", ".update-employee", function () {
+        var OrderId = $(this).data('id');
+        var EmailId = document.getElementsByName("email-id")[OrderId-1].value;
+        var NameId = document.getElementsByName("nama-id")[OrderId-1].value;
+        var TelpId = document.getElementsByName("telp-id")[OrderId-1].value;
+        var DivisiId = document.getElementsByName("divisi-id")[OrderId-1].value;
+        $(".modal-body #emailId").val( EmailId );
+        $(".modal-body #nameId").val( NameId );
+        $(".modal-body #telpId").val( TelpId );
+        $(".modal-body #divisiId").val( DivisiId );
+        });
+
+    }
+        
+    </script>
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>

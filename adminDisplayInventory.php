@@ -84,7 +84,7 @@
                     <!-- Modal -->
                     <div class="modal fade" id="confirmation" role="dialog">
                         <div class="modal-dialog">
-                        
+                        <form action="validateadi.php"  method="post">
                             <!-- Modal content-->
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -93,13 +93,14 @@
                             </div>
                             <div class="modal-body">
                                 <label>Anda yakin akan menghapus produk tersebut?</label>
+                                <input name="order-id" type="hidden" id="orderId" value="">
                             </div>
                             <div class="modal-footer">
-                                <button type="button"  data-dismiss="modal" class="btn btn-sm btn-warning">OK</button>
+                                <button type="submit" name="Post" class="btn btn-sm btn-warning">OK</button>
                                 <button type="button"  data-dismiss="modal" class="btn btn-sm btn-danger">Cancel</button>
                             </div>
                           </div>
-                          
+                          </form>
                         </div>
                     </div>
 
@@ -107,7 +108,7 @@
                     <!-- Modal -->
                     <div class="modal fade" id="myModal" role="dialog">
                         <div class="modal-dialog">
-                        
+                            <form action="validateaui.php" method="post">
                             <!-- Modal content-->
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -115,23 +116,24 @@
                                 <h4 class="modal-title">Formulir Perubahan</h4>
                             </div>
                             <div class="modal-body">
-                                <form role="form">
+    
                                     <label>Nama</label>
-                                    <input type="password" class="form-control" placeholder="Enter new password">
+                                    <input type="text" name="name" class="form-control" placeholder="Enter new password" id="nameId" value="">
                                     <label>Vendor</label>
-                                    <input type="password" class="form-control" placeholder="Enter new name">
+                                    <input type="text" name="vendor"class="form-control" placeholder="Enter new name" id="vendorId" value="">
                                     <label>Stok</label>
-                                    <input type="password" class="form-control" placeholder="Enter new number phone">
+                                    <input type="text" name="stock" class="form-control" placeholder="Enter new number phone" id="stockId" value="">
                                     <label>Harga</label>
-                                    <input type="password" class="form-control" placeholder="Enter new division">
-                                </form>
+                                    <input type="text" name="price" class="form-control" placeholder="Enter new division" id="priceId" value="">
+                                    <input name="inventoryid" type="hidden" id="inventoryId" value="">
+                            
                             </div>
                             <div class="modal-footer">
-                                <button type="button"  data-dismiss="modal" class="btn btn-sm btn-warning">OK</button>
+                                <button type="submit"  name="Post" class="btn btn-sm btn-warning">OK</button>
                                 <button type="button"  data-dismiss="modal" class="btn btn-sm btn-danger">Cancel</button>
                             </div>
                           </div>
-                          
+                          </form>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -161,6 +163,10 @@
                                                         $no = 1;
                                                         while ($obj = $result->fetch_object()) {
                                                         $id = $obj->id_inventory;
+                                                        $nama = $obj->nama;
+                                                        $vendor = $obj->vendor;
+                                                        $stok = $obj->stok;
+                                                        $harga = $obj->harga;
                                                 ?>
  
                                                 <tr align='left'>
@@ -171,10 +177,15 @@
                                                     <td><?php echo  $obj->stok; ?></td>
                                                     <td><?php echo  $obj->harga; ?></td>
                                                     <td>
-                                                        <buttontype="submit" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmation">Hapus</button>
+                                                        <buttontype="submit" class="delete-inventory btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmation" data-id=<?php echo $id?> value=<?php echo $id?> onclick= "validate()">Hapus</button>
                                                     </td>
                                                     <td>    
-                                                        <buttontype="submit" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#myModal">Ubah</button>
+                                                        <buttontype="submit" class="update-inventory btn btn-sm btn-warning" data-toggle="modal" data-target="#myModal" data-id=<?php echo $no?> value=<?php echo $id?> onclick= "validateupdate()">Ubah</button>
+                                                        <input name="nama-id" type="hidden" id="<?php echo $no?>" value="<?php echo $nama?>">
+                                                        <input name="vendor-id" type="hidden" id="<?php echo $no?>" value="<?php echo $vendor?>">
+                                                        <input name="stok-id" type="hidden" id="<?php echo $no?>" value="<?php echo $stok?>">
+                                                        <input name="harga-id" type="hidden" id="<?php echo $no?>" value="<?php echo $harga?>">
+                                                        <input name="inventory-id" type="hidden" id="<?php echo $no?>" value="<?php echo $id?>">
                                                     </td>
                                                 </tr>
                                             <?php
@@ -205,7 +216,34 @@
 
     </div>
     <!-- /#wrapper -->
+        <script>
+    var validate = function(){
+        $(document).on("click", ".delete-inventory", function () {
+        var OrderId = $(this).data('id');
+        alert(OrderId);
+        $(".modal-body #orderId").val( OrderId );
+        });
 
+    };
+
+     var validateupdate = function(){
+        $(document).on("click", ".update-inventory", function () {
+        var OrderId = $(this).data('id');
+        var InventoryId = document.getElementsByName("inventory-id")[OrderId-1].value;
+        var NameId = document.getElementsByName("nama-id")[OrderId-1].value;
+        var VendorId = document.getElementsByName("vendor-id")[OrderId-1].value;
+        var StockId = document.getElementsByName("stok-id")[OrderId-1].value;
+        var PriceId = document.getElementsByName("harga-id")[OrderId-1].value;
+        $(".modal-body #inventoryId").val( InventoryId );
+        $(".modal-body #nameId").val( NameId );
+        $(".modal-body #vendorId").val( VendorId );
+        $(".modal-body #stockId").val( StockId );
+        $(".modal-body #priceId").val( PriceId );
+        });
+
+    };
+        
+    </script>
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
 

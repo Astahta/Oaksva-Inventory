@@ -101,8 +101,6 @@
                                    $data = htmlspecialchars($data);
                                    return $data;
                                 }
-                              
- 
                                             //Data mentah yang ditampilkan ke tabel    
                                                 $con = mysqli_connect("localhost","root","","oaksva");
                                                 $stmt = $con->prepare("INSERT INTO pegawai (email, nama, no_telpon, divisi, password) VALUES (?, ?, ?, ?, ?)");
