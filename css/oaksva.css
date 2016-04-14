@@ -1,0 +1,88 @@
+body {
+	background-color: #eee;
+	margin-top: 50px;
+}
+
+/* Panel COntents */
+.panel-heading {
+	padding: 15px;	
+	background: #005533;
+}
+
+.panel-title {
+	font-size: 1.6em;
+}
+
+
+/* Navigation Setting */
+.navbar {
+	background: #111;
+}
+
+.navbar a {
+	color: #F0AD4E;
+}
+
+.navbar a:hover {
+	color: #FFF;
+	background: ##F0AD4E;
+}
+
+.navbar ul li:hover {
+	color: #F0AD4E;
+	background-color: #333;
+}
+
+.navbar-toggle {
+	background:  #F0AD4E;
+	color: #333;
+}
+
+.navbar-toggle .icon-bar {
+	background: #222;
+}
+
+.navbar-inverse .navbar-toggle ul li a:hover {
+	background: #666;
+}
+
+.navbar, .navbar-inverse .collapse {
+	background-color: #222;
+}
+
+.navbar-inverse .navbar-brand {
+	font-size: 1.6em;
+	color: #F0AD4E;
+}
+
+.navbar-inverse .side-nav li a{
+	padding: 15px;
+	font-size: 1.2em;
+	color: #F0AD4E;
+	background-color: none;
+}
+
+.navbar-inverse .side-nav li a:hover {
+	background: #E08D2E;
+	color: #fff;
+}
+
+.navbar-inverse .side-nav li a:active{
+	background: #F0AD4E;
+	color: #111;
+}
+
+.navbar-inverse {
+	border: 1px solid #111;
+}
+
+/* Layout Setting */
+#wrapper, #page-wrapper {
+	background: none;
+}
+
+#form-login, #page-wrappe {
+	box-shadow: 10px 10px 20px #888888;
+	-webkit-box-shadow: 10px 10px 20px #888888;
+	-moz-box-shadow: 10px 10px 20px #888888;
+}
