@@ -101,7 +101,8 @@
                                    return $data;
                                 }
                               
- 
+                                        if(!isset($Name_Product) || trim($Name_Product)==='' || !isset($Name_Vendor) || trim($Name_Vendor)==='' || !isset($Stock) || trim($Stock)==='' || !isset($Price) || trim($Price)===''){}
+                                                else{
                                             //Data mentah yang ditampilkan ke tabel    
                                                 $con = mysqli_connect("localhost","root","","oaksva");
                                                 $stmt = $con->prepare("INSERT INTO inventory (nama, vendor, stok, harga) VALUES (?, ?, ?, ?)");
@@ -113,7 +114,7 @@
                                                 $stmt->execute();
                                                 $stmt->close();
                                                 $con->close();
-                       
+                                        }
                                                     
                                 ?>
                                 <form role="form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">                                   

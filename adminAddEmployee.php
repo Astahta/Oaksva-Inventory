@@ -101,6 +101,8 @@
                                    $data = htmlspecialchars($data);
                                    return $data;
                                 }
+                                            if(!isset($Name_Employee) || trim($Name_Employee)==='' || !isset($Phone_Employee) || trim($Phone_Employee)==='' || !isset($Division_Employee) || trim($Division_Employee)==='' || !isset($Email_Employee) || trim($Email_Employee)==='' || !isset($Password_Employee) || trim($Password_Employee)===''){}
+                                                else{
                                             //Data mentah yang ditampilkan ke tabel    
                                                 $con = mysqli_connect("localhost","root","","oaksva");
                                                 $stmt = $con->prepare("INSERT INTO pegawai (email, nama, no_telpon, divisi, password) VALUES (?, ?, ?, ?, ?)");
@@ -113,7 +115,7 @@
                                                 $stmt->execute();
                                                 $stmt->close();
                                                 $con->close();
-                       
+                                            }
                                                     
                                 ?>
                                 <form role="form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
