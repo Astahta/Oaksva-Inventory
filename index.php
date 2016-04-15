@@ -49,7 +49,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="adminDisplayInventory.php">Inventory</a>
+                        <a href="Inventory.php">Inventory</a>
                     </li>
                     <li>
                         <a href="order.php">Order</a>

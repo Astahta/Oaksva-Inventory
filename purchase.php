@@ -30,7 +30,16 @@
 </head>
 
 <body>
-
+    <?php
+        if(isset($_GET['stat'])){
+            $stat = $_GET['stat'];
+            if($stat==1){
+                echo "<script type='text/javascript'>alert('Validate success');</script>";
+            }else if($stat == 0){
+                echo "<script type='text/javascript'>alert('Wrong Acount');</script>";
+            }
+        }
+    ?>
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -81,26 +90,30 @@
                     <!-- Modal -->
                     <div class="modal fade" id="myModal" role="dialog">
                         <div class="modal-dialog">
-                        
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Validation Form</h4>
-                            </div>
-                            <div class="modal-body">
-                                <label>email</label>
-                                <input class="form-control" placeholder="Enter your email">
-                                <br>
-                                <label>password</label>
-                                <input type="password" class="form-control" placeholder="Enter your password">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button"  data-dismiss="modal" class="btn btn-sm btn-warning">OK</button>
-                                <button type="button"  data-dismiss="modal" class="btn btn-sm btn-danger">Cancel</button>
-                            </div>
-                          </div>
-                          
+                            <form action="validate-purchase.php"  method="post">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Validation Form</h4>
+                                </div>
+                                    <div class="modal-body">
+                                        <label>email</label>
+                                        <input name ="email" class="form-control" placeholder="Enter your email">
+                                        <br>
+                                        <label>password</label>
+                                        <input name="password" type="password" class="form-control" placeholder="Enter your password">
+                                        <input name="order-id" type="hidden" id="orderId" value="">
+                                        <input name="stoki" type="hidden" id="stoki" value="">
+                                        <input name="iven" type="hidden" id="iven" value="">
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="Post" class="btn btn-sm btn-warning">OK</button>
+                                        <button type="button"  data-dismiss="modal" class="btn btn-sm btn-danger">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -114,8 +127,11 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
+                                                        <th>Order ID</th>
                                                         <th>Name</th>
                                                         <th>Phone</th>
+                                                        <th>Inventory</th>
+                                                        <th>Total Harga</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -125,13 +141,8 @@
                                                         //Data mentah yang ditampilkan ke tabel    
                                                         $con = mysqli_connect("localhost","root","","oaksva");
                                                         
-                                                        $sql = 'SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "undone"';
-                                                            //printf("Select returned %d rows.\n", mysqli_num_rows($result));
-
-                                                            /* free result set */
-                                                            //mysqli_free_result($result);
-                                                        //}
-                                                        //$sql = mysql_query('SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "undone"');
+                                                        $sql = 'SELECT transaksi_pesanan.id_inventory as iv, transaksi_pesanan.id_pesanan as ip, inventory.nama as ni, transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp, transaksi_pesanan.jumlah_pesan * inventory.harga as harga, transaksi_pesanan.jumlah_pesan as jml  FROM pesanan NATURAL JOIN transaksi_pesanan NATURAL JOIN inventory WHERE transaksi_pesanan.status_pembayaran = "undone" ORDER BY transaksi_pesanan.id_pesanan';
+                                                            
                                                         $result = mysqli_query($con, $sql);
                                                         $no = 1;
                                                         while ($obj = $result->fetch_object()) {
@@ -140,11 +151,19 @@
  
                                                     <tr align='left'>
                                                         <td><?php echo  $no;?></td>
+                                                        <td><?php echo  $obj->ip; ?></td>
                                                         <td><?php echo  $obj->nama; ?></td>
                                                         <td><?php echo  $obj->telp; ?></td>
+                                                        <td><?php echo  $obj->ni; ?></td>
+                                                        <td><?php echo  $obj->harga; ?></td>
+
                                                         <td>
-                                                            <buttontype="submit" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#myModal">Validate</button>
+                                                            <input type="hidden" name="idinventory" id="<?php echo $no?>"  value="<?php echo $obj->iv ?>"></input>
+                                                            <input type="hidden" name="stok" id="<?php echo $no?>"  value="<?php echo $obj->jml ?>"></input>
+                                                            <button type="submit" name="noid" data-id=<?php echo $no?> class="vpurchase btn btn-sm btn-warning" value="<?php echo $id?>"  data-toggle="modal" data-target="#myModal" onclick= "validate()" >Validate</button>
+                                                            
                                                         </td>
+                                                        
                                                     </tr>
                                                     <?php
                                                     $no++;
@@ -171,6 +190,20 @@
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
+    <script>
+    var validate = function(){
+        $(document).on("click", ".vpurchase", function () {
+        var OrderId = $(this).data('id');
+        var Value = document.getElementsByName("noid")[OrderId-1].value;
+        var stok = document.getElementsByName("stok")[OrderId-1].value;
+        var iven = document.getElementsByName("idinventory")[OrderId-1].value;
+        $(".modal-body #orderId").val( Value );
+        $(".modal-body #stoki").val( stok );
+        $(".modal-body #iven").val( iven );
+        });
+
+    };
+    </script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>

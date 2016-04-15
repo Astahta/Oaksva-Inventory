@@ -138,7 +138,7 @@
                                                         //Data mentah yang ditampilkan ke tabel    
                                                         $con = mysqli_connect("localhost","root","","oaksva");
                                                         
-                                                        $sql = 'SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp, pesanan.alamat_pemesan as alamat  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "undone" AND transaksi_pesanan.status_pengiriman = "undone"';
+                                                        $sql = 'SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp, pesanan.alamat_pemesan as alamat  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "undone" AND transaksi_pesanan.status_pengiriman = "undone" GROUP BY pesanan.id_pesanan';
                                                         
                                                         $result = mysqli_query($con, $sql);
                                                         $no = 1;

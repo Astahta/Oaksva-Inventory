@@ -20,9 +20,8 @@ if(isset($_POST['Post'])){
     if ($result->num_rows > 0) {
     	$update_transaction =  $con->prepare('UPDATE transaksi_pesanan SET status_pengiriman = "done", tanggal_kirim = CURRENT_DATE(), email_pegawai = ? WHERE id_pesanan = ?');
     	$update_transaction->bind_param("si",$email,$order);
-        var_dump ($order);
     	$update_transaction->execute();
-    	//Redirect('Delivery.php?stat=1', false);
+    	Redirect('Delivery.php?stat=1', false);
     }else{
     	Redirect('Delivery.php?stat=0', false);
     }
