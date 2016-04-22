@@ -16,8 +16,6 @@
 
     <!-- Custom CSS -->
     <link href="css/sb-admin.css" rel="stylesheet">
-    <!-- override custome CSS -->
-    <link href="css/oaksva.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -81,34 +79,108 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-12">
+                                     <?php
+                                // define variables and set to empty values
+                                $Nama_Pemesan = $No_Telpon = $Alamat_Pesan = $Id_Produk = $Nama_Produk = $Jumlah_Pesanan = "";
+                                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                                   $Nama_Pemesan = test_input($_POST["Customer"]);
+                                   $No_Telpon = test_input($_POST["Notelp"]);
+                                   $Alamat_Pesan = test_input($_POST["Address"]);
+                                   $Id_Produk = test_input($_POST["sel1"]);
+                                   $Jumlah_Pesanan = test_input($_POST["JumlahPesanan"]);
+                                }       
 
-                                <form role="form" method="post" action="orderPost.php" >
+                                function test_input($data) {
+                                   $data = trim($data);
+                                   $data = stripslashes($data);
+                                   $data = htmlspecialchars($data);
+                                   return $data;
+                                }
+                                if(!isset($Nama_Pemesan) || trim($Nama_Pemesan)==='' || !isset($No_Telpon) || trim($No_Telpon)==='' || !isset($Alamat_Pesan) || trim($Alamat_Pesan)===''){}
+                                    else{
+                                //Data mentah yang ditampilkan ke tabel    
+                                    $con = mysqli_connect("localhost","root","","oaksva");
+                                    $stmt = $con->prepare("INSERT INTO pesanan (nama_pemesan, no_telpon, tanggal_pesan, alamat_pemesan) VALUES (?, ?, now(), ?)");
+                                    $stmt->bind_param("sss", $nama, $telpon, $alamat);
+                                    $nama = $Nama_Pemesan;
+                                    $telpon = $No_Telpon;                                        
+                                    $alamat = $Alamat_Pesan;
+                                    $stmt->execute();
+                                    $stmt->close();
+                                    $con->close();
+                                }
+
+                            //Data mentah yang ditampilkan ke tabel    
+                                $con = mysqli_connect("localhost","root","","oaksva");
+                                        
+                                $sql = 'SELECT max(id_pesanan) as max FROM pesanan';
+                                        $result = mysqli_query($con, $sql);
+                                        while ($obj = $result->fetch_object()) {
+                                        $id_pesanan = $obj->max;   
+                                    }
+                                    $con->close();
+
+                                    //Insert ke tabel transaksi_pesanan
+                                      if(!isset($id_pesanan) || trim($id_pesanan)==='' || !isset($Id_Produk) || trim($Id_Produk)==='' || !isset($Jumlah_Pesanan) || trim($Jumlah_Pesanan)===''){}
+                                    else{
+                                //Data mentah yang ditampilkan ke tabel    
+                                    $con = mysqli_connect("localhost","root","","oaksva");
+                                    $stmt = $con->prepare("INSERT INTO transaksi_pesanan (id_pesanan, id_inventory, jumlah_pesan) VALUES (?, ?, ?)");
+                                    $stmt->bind_param("sss", $idpesan, $idproduk, $jumlahpesan);
+                                    $idpesan = $id_pesanan;
+                                    $idproduk = $Id_Produk;                                        
+                                    $jumlahpesan = $Jumlah_Pesanan;
+                                    $stmt->execute();
+                                    $stmt->close();
+                                    $con->close();
+                                }
+                                                    
+                                ?>
+                                <form role="form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" >
                                 <h3>Customer</h3>
                                     <div class="form-group">
                                         <label>Customer name</label>
-                                        <input type="text" class="form-control input-lg" name="Customer" placeholder="Enter customer name">
+                                        <input type="text" class="form-control input-lg" name="Customer" id="Customer" placeholder="Enter customer name">
                                     </div>
 
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input type="text" class="form-control input-lg" name="Address" placeholder="Enter customer address">
+                                        <input type="text" class="form-control input-lg" name="Address" id="Address" placeholder="Enter customer address">
                                     </div>
 
                                     <div class="form-group">
                                         <label>Phone number</label>
-                                        <input type="text" class="form-control input-lg" name="Notelp" placeholder="Phone number : 0813236074">
+                                        <input type="text" class="form-control input-lg" name="Notelp" id="Notelp" placeholder="Phone number : 0813236074">
                                     </div>
 
-                                    <div class="form-group ">
-                                        <label>Date</label><br>
-                                        <input type="date" class="col-sm-6 input-lg" name="Date">
-                                    </div>
                                     <br><br>
                                     <h3>Masukkan Pesanan</h3>
-                                    <div class="form-group form-inline">
-                                        <label>Tambah barang </label>
-                                        <input type="number" class="form-control input-lg" id="myNumber" name="Notelp" value="1">
-                                        <span onclick="myFunction()" class="btn btn-info btn-lg">Generate</span>
+                                    <div class="form-group">
+                                       <div class="dropdown">
+                                            <label>Nama Produk</label>
+                                            <br>
+                                          <select class="form-control" id="sel1" name="sel1">
+                                                     <?php
+             
+                                                        //Data mentah yang ditampilkan ke tabel    
+                                                            $con = mysqli_connect("localhost","root","","oaksva");
+                                                                    
+                                                            $sql = 'SELECT id_inventory, nama FROM inventory';
+                                                                    $result = mysqli_query($con, $sql);
+                                                                    while ($obj = $result->fetch_object()) {
+                                                                    $id_inventory = $obj->id_inventory;    
+                                                                    $namaproduk = $obj->nama;
+                                                                    echo "<option value=$id_inventory>$namaproduk</option>";
+                
+                                                                }
+                                                                $con->close();
+                                                    ?>
+                                          </select>
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <label>Jumlah Pesanan</label>
+                                        <input type="number" class="form-control input-lg" id="JumlahPesanan" name="JumlahPesanan" value="1">
                                     </div>
                                     <div class="table-responsive">  
                                      <table class='table table-bordered table-hover table-striped ' id="tablee">
