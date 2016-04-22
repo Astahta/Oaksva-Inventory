@@ -28,16 +28,15 @@ if(isset($_POST['Post'])){
         // while($inventory->fetch()){
         //     print_r($col1);
         // }
-        print_r($iven);
-
-        $update_transaction =  $con->prepare('UPDATE transaksi_pesanan SET status_pengiriman = "done", tanggal_kirim = CURRENT_DATE(), email_pegawai = ? WHERE id_pesanan = ? AND id_inventory = ?');
+        
+        $update_transaction =  $con->prepare('UPDATE transaksi_pesanan SET status_pembayaran = "done", tanggal_kirim = CURRENT_DATE(), email_pegawai = ? WHERE id_pesanan = ? AND id_inventory = ?');
         $update_transaction->bind_param("ssi",$email,$order,$iven);
         $update_transaction->execute();
 
-        $stok =  $con->prepare('UPDATE inventory SET stok = ? WHERE id_inventory = ?');
-        $stok->bind_param("ii",$stok,$iven);
-        $stok->execute();
-        //Redirect('purchase.php?stat=1', false);
+        $_stok =  $con->prepare('UPDATE inventory SET stok = (stok - ?) WHERE id_inventory = ?');
+        $_stok->bind_param("ii",$stok,$iven);
+        $_stok->execute();
+        Redirect('purchase.php?stat=1', false);
     }else{
         //Redirect('purchase.php?stat=0', false);
     }

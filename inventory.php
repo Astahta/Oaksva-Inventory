@@ -76,7 +76,7 @@
                 <br>
                 <div class="panel panel-yellow">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Purchase</h3>
+                        <h3 class="panel-title">Inventory</h3>
                     </div>
                     
 
@@ -84,7 +84,6 @@
                         <div class="row">
                             <div class="col-lg-6">
 
-                                        <h2>Bordered with Striped Rows</h2>
                                         <div class="table-responsive">
                                             <table id="inventory" class="table table-bordered table-hover table-striped">
                                                 <thead>

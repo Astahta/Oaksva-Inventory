@@ -85,7 +85,7 @@
                 <br>
                 <div class="panel panel-yellow">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Purchase</h3>
+                        <h3 class="panel-title">Delivery</h3>
                     </div>
                     <!-- Modal -->
                     <div class="modal fade" id="myModal" role="dialog">
@@ -120,7 +120,6 @@
                         <div class="row">
                             <div class="col-lg-6">
 
-                                        <h2>Bordered with Striped Rows</h2>
                                         <div class="table-responsive">
                                             <table id="delivery" class="table table-bordered table-hover table-striped">
                                                 <thead>
@@ -138,7 +137,7 @@
                                                         //Data mentah yang ditampilkan ke tabel    
                                                         $con = mysqli_connect("localhost","root","","oaksva");
                                                         
-                                                        $sql = 'SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp, pesanan.alamat_pemesan as alamat  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "undone" AND transaksi_pesanan.status_pengiriman = "undone" GROUP BY pesanan.id_pesanan';
+                                                        $sql = 'SELECT transaksi_pesanan.id_pesanan as id, pesanan.nama_pemesan as nama, pesanan.no_telpon as telp, pesanan.alamat_pemesan as alamat  FROM pesanan NATURAL JOIN transaksi_pesanan WHERE transaksi_pesanan.status_pembayaran = "done" AND transaksi_pesanan.status_pengiriman = "undone" GROUP BY pesanan.id_pesanan';
                                                         
                                                         $result = mysqli_query($con, $sql);
                                                         $no = 1;
